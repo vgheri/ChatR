@@ -1,0 +1,7 @@
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\ChatR.dll
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\ChatR.pdb
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\EntityFramework.dll
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\EntityFramework.xml
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\obj\Debug\ChatR.dll
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\obj\Debug\ChatR.pdb
