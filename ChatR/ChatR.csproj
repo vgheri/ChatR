@@ -47,6 +47,9 @@
     <Reference Include="SignalR">
       <HintPath>..\packages\SignalR.Server.0.5.2\lib\net40\SignalR.dll</HintPath>
     </Reference>
+    <Reference Include="SignalR.Hosting.AspNet">
+      <HintPath>..\packages\SignalR.Hosting.AspNet.0.5.2\lib\net40\SignalR.Hosting.AspNet.dll</HintPath>
+    </Reference>
     <Reference Include="SignalR.Hosting.Common">
       <HintPath>..\packages\SignalR.Hosting.Common.0.5.2\lib\net40\SignalR.Hosting.Common.dll</HintPath>
     </Reference>
@@ -80,7 +83,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
-    <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\ChatMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
