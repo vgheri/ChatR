@@ -21,3 +21,12 @@ C:\Users\valerio\Git_Repositories\ChatR\ChatR\bin\SignalR.Hosting.Common.xml
 C:\Users\valerio\Git_Repositories\ChatR\ChatR\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\valerio\Git_Repositories\ChatR\ChatR\obj\Debug\ChatR.dll
 C:\Users\valerio\Git_Repositories\ChatR\ChatR\obj\Debug\ChatR.pdb
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\Newtonsoft.Json.dll
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\SignalR.dll
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\SignalR.Hosting.AspNet.dll
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\SignalR.Hosting.Common.dll
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\Newtonsoft.Json.xml
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\SignalR.xml
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\SignalR.Hosting.AspNet.xml
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\SignalR.Hosting.Common.xml

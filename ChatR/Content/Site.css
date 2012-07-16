@@ -1,75 +1,53 @@
-body
+body 
 {
-    font-size: .85em;
-    font-family: "Trebuchet MS", Verdana, Helvetica, Sans-Serif;
-    color: #232323;
-    background-color: #fff;
+	font-family: Helvetica;
 }
 
-header,
-footer,
-nav,
-section {
-    display: block;
+h1 
+{
+	font-size: 50px;    
+	padding-bottom: 20px;
 }
 
-/* Styles for basic forms
------------------------------------------------------------*/
-
-fieldset 
+#form-container 
 {
-    border:1px solid #ddd;
-    padding:0 1.4em 1.4em 1.4em;
-    margin:0 0 1.5em 0;
-}
-
-legend 
-{
-    font-size:1.2em;
-    font-weight: bold;
-}
-
-textarea 
-{
-    min-height: 75px;
-}
-
-.editor-label 
-{
-    margin: 1em 0 0 0;
-}
-
-.editor-field 
-{
-    margin:0.5em 0 0 0;
+	display: block;
+	height: 500px;
+	width: 700px;    
+	margin: 0 auto;
+	margin-top: 5%;
 }
 
 
-/* Styles for validation helpers
------------------------------------------------------------*/
-.field-validation-error
-{
-    color: #ff0000;
+#description {
+	font-size: larger;
 }
 
-.field-validation-valid
+#input-box 
 {
-    display: none;
+	margin-top: 40px;
 }
 
-.input-validation-error
-{
-    border: 1px solid #ff0000;
-    background-color: #ffeeee;
+label 
+{    
+	font-size: 18px;
 }
 
-.validation-summary-errors
+input, button 
 {
-    font-weight: bold;
-    color: #ff0000;
+	margin-top: 15px;
+	margin-right: 25px;
 }
 
-.validation-summary-valid
-{
-    display: none;
+#username
+{    
+	height: 20px;
+	width: 250px;
+	line-height: 25px;
+	font-size: 25px;
+	font-weight: 300;
+	padding: 12px; 
+	color: #353535;
+	letter-spacing: 1px;
+	font-family: museo-sans-rounded;
 }
