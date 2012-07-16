@@ -13,13 +13,13 @@ namespace ChatR.Hubs
         #region IDisconnect and IConnected event handlers implementation
 
         public System.Threading.Tasks.Task Disconnect()
-        {
+        {   
             return Clients.leaves(Context.ConnectionId, Caller.userName, DateTime.Now);
         }
 
         public System.Threading.Tasks.Task Connect()
         {
-            return Clients.joined(Context.ConnectionId, Caller.userName, DateTime.Now);
+            return Clients.joined(Context.ConnectionId, Caller.username, DateTime.Now);
         }
 
         public System.Threading.Tasks.Task Reconnect(IEnumerable<string> groups)
@@ -32,7 +32,7 @@ namespace ChatR.Hubs
         #region Chat event handlers
 
         public void Send(ChatMessage message)
-        {
+        {               
             message.Timestamp = DateTime.Now;
             Clients.onMessageReceived(message);
         }

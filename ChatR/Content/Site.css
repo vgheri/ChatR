@@ -51,3 +51,36 @@ input, button
 	letter-spacing: 1px;
 	font-family: museo-sans-rounded;
 }
+
+
+/* Chat specific style */
+#chat-list 
+{    
+    height: 550px;
+    overflow-y: auto;    
+    border: 1px solid gray;
+    -moz-border-radius: 3px;
+    border-radius: 3px;    
+}
+
+#users-list 
+{
+    height: 550px;
+    overflow-y: auto;
+    border: 1px solid gray;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+#compose-box 
+{
+    width: 500px;
+}
+    
+.chat-message 
+{
+    padding: 5px;
+}
+
+    
+    
