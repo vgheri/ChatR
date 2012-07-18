@@ -84,6 +84,8 @@
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Models\ChatMessage.cs" />
+    <Compile Include="Models\ChatUser.cs" />
+    <Compile Include="Models\InMemoryRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -72,6 +72,11 @@
         var chatR = $.connection.chatHub; // chat is the name of the Hub as declared in server side code
         chatR.username = "@ViewBag.username";
 
+        /* Not useful at the moment
+        chatR.connected = function () {
+            chatR.joined();
+        } */
+
         // Client-side event handlers, as declared inside the  Hub
         chatR.onMessageReceived = function (message) {
             chat.messages.push(new ChatMessage(message.Username, message.Message, new Date(message.Timestamp)));
@@ -87,10 +92,11 @@
             users.contacts.push(connectedUser);
         }
 
+        /* Not usefl at the moment
         chatR.rejoined = function (connectionId, username, timestamp) {
             var connectedUser = new User(username);
             users.contacts.push(connectedUser);
-        }
+        }*/
 
         $("#send-btn").click(function () {
             var content = $("#compose-box").val();
@@ -107,7 +113,20 @@
         ko.applyBindings(users, $("#users-list")[0]);
         ko.applyBindings(chat, $("#chat-list")[0]);
 
-        $.connection.hub.start();
+        // Step 1: Start the connection
+        // Step 2: Get all currenlty connected users
+        // Step 3: Join to the chat and nmotify all the clients (me included) that there is a new user connected
+        $.connection.hub.start()
+                        .done(function () {
+                            chatR.getConnectedUsers()
+                                     .done(function (connectedUsers) {
+                                         ko.utils.arrayForEach(connectedUsers, function(item) {
+                                            users.contacts.push(new User(item.Username));
+                                            });
+                                     }).done(function() { 
+                                        chatR.joined();
+                                        });
+                        });
     });
 
 
