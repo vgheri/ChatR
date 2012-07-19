@@ -51,10 +51,10 @@ namespace ChatR.Hubs
         {
             // Sanitize input: Search and replace every <script> and </script> tag with (script) and (/script)
             message.Message = HttpUtility.HtmlEncode(message.Message);
-            // Process URLs: Extract any URL and add <a href=""></a> around it
+            // Process URLs: Extract any URL and process rich content (e.g. Youtube links)
             HashSet<string> extractedURLs = new HashSet<string>();
             message.Message = TextParser.TransformAndExtractUrls(message.Message, out extractedURLs);          
-            // Process Rich content (youtube links, etc...)
+            
             message.Timestamp = DateTime.Now;
             Clients.onMessageReceived(message);
         }
