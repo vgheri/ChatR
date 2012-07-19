@@ -10,6 +10,13 @@
   </style>
 <![endif]-->
 
+<style>
+    body 
+    {
+        background-color: #E6E6E6;
+    }
+</style>
+
 @if (false) { 
     <script src="../../Scripts/jquery-1.7.2-vsdoc.js" type="text/javascript"></script>
 }
@@ -20,15 +27,18 @@
 
 <div id="myContainer" class="container-fluid">    
     <div class="row-fluid">
-        <!-- This  is the contact box -->
-        <div id="users-list" class="span2" data-bind="foreach: contacts">
-            <p data-bind="text: username"></p>        
+        <!-- This  is the contact box -->        
+        <div id="users-list" class="span2">
+            <h4>Users</h4> 
+            <ul data-bind="foreach: contacts">
+                <li class="user-box"><img src="@Url.Content("~/Content/images/user.gif")" alt="user icon" width="18px" height="20px" /> | <span class="user-box-name" data-bind="text: username"></span></li>
+            </ul>
         </div>
         <!-- This  is the chat box -->
         <div id="chat-list" class="span8" data-bind="foreach: messages">
             <ul>
                 <li>
-                    <div class="chat-listitem-username" data-bind="text: Username">                     
+                    <div class="chat-listitem-username" data-bind="text: Username">                    
                     </div>                
                     <div class="chat-listitem-message" data-bind="html: Message">                    
                     </div>                
