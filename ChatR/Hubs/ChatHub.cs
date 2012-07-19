@@ -5,6 +5,7 @@ using System.Web;
 using SignalR;
 using SignalR.Hubs;
 using ChatR.Models;
+using ChatR.Utilities;
 
 namespace ChatR.Hubs
 {
@@ -47,7 +48,13 @@ namespace ChatR.Hubs
         #region Chat event handlers
 
         public void Send(ChatMessage message)
-        {               
+        {
+            // Sanitize input: Search and replace every <script> and </script> tag with (script) and (/script)
+            message.Message = HttpUtility.HtmlEncode(message.Message);
+            // Process URLs: Extract any URL and add <a href=""></a> around it
+            HashSet<string> extractedURLs = new HashSet<string>();
+            message.Message = TextParser.TransformAndExtractUrls(message.Message, out extractedURLs);          
+            // Process Rich content (youtube links, etc...)
             message.Timestamp = DateTime.Now;
             Clients.onMessageReceived(message);
         }

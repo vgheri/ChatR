@@ -14,3 +14,7 @@ C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\SignalR.xml
 C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\SignalR.Hosting.AspNet.xml
 C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\SignalR.Hosting.Common.xml
 C:\Users\vgheri\Git_Repositories\ChatR\ChatR\obj\Debug\ChatR.dll
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\AntiXssLibrary.dll
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\HtmlSanitizationLibrary.dll
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\AntiXssLibrary.xml
+C:\Users\vgheri\Git_Repositories\ChatR\ChatR\bin\HtmlSanitizationLibrary.xml

@@ -56,31 +56,81 @@ input, button
 /* Chat specific style */
 #chat-list 
 {    
-    height: 550px;
-    overflow-y: auto;    
+    height: 600px;
+    overflow-y: auto;
+    overflow-style: marquee-line;
+	
     border: 1px solid gray;
-    -moz-border-radius: 3px;
-    border-radius: 3px;    
+    -moz-border-radius: 2px;
+    border-radius: 2px;     
+}
+
+#chat-list div 
+{
+    float:left;
+}
+
+#chat-list ul {
+	list-style: none;				
+}
+
+#chat-list ul li 
+{
+    float:left;
+	display:inline;
+	margin-left: -25px;
+	border-bottom: 1px solid gray;
+}
+
+.chat-listitem-username 
+{
+    display:block;
+    float: left;
+    width: 150px;
+    padding: 5px;
+    margin-left: 0;    
+    background-color:Gray;
+}
+
+.chat-listitem-message 
+{   
+    width:500px;
+    padding: 5px;    
+    word-wrap: break-word;    
+}
+
+.chat-listitem-timestamp 
+{   
+    text-align: center;
+    font-weight:lighter;    
+    padding: 5px;    
+    width: 85px;    
+    background-color:Gray;       
 }
 
 #users-list 
 {
-    height: 550px;
+    height: 600px;
     overflow-y: auto;
     border: 1px solid gray;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+
+#compose 
+{
+    margin-top: 30px;
 }
 
 #compose-box 
-{
-    width: 500px;
-}
-    
-.chat-message 
-{
-    padding: 5px;
+{    
+    width: 650px;
 }
 
+#send-btn 
+{
+    margin-top:5px;
+    width: 100px;
+}   
     
     

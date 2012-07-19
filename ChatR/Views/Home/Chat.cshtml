@@ -17,19 +17,23 @@
             <p data-bind="text: username"></p>        
         </div>
         <!-- This  is the chat box -->
-        <div id="chat-list" class="span10" data-bind="foreach: messages">
-            <div class="row-fluid chat-message">
-                <div class="span12">
-                    <span data-bind="text: Username"></span> (<span data-bind="text: Timestamp.toLocaleTimeString()"></span>) says &gt; 
-                    <span data-bind="text: Message"></span>
-                </div>
-            </div>
+        <div id="chat-list" class="span8" data-bind="foreach: messages">
+            <ul>
+                <li>
+                    <div class="chat-listitem-username" data-bind="text: Username">                     
+                    </div>                
+                    <div class="chat-listitem-message" data-bind="html: Message">                    
+                    </div>                
+                    <div class="chat-listitem-timestamp" data-bind="text: Timestamp.toLocaleTimeString()">
+                    </div>
+                </li>
+            </ul>
         </div>
-    </div>
-    <div class="row-fluid">
+    </div>    
+    <div id="compose" class="row-fluid">
         <div class="span2"></div>
         <div class="span10">                            
-                <textarea id="compose-box" rows="2" cols="50" placeholder="Type your message..."></textarea>     
+                <textarea id="compose-box" rows="2" cols="50" placeholder="Type your message here"></textarea>     
                 <button id="send-btn" type="submit" class="btn btn-large btn-primary">Send</button>            
         </div>        
     </div>
@@ -62,23 +66,25 @@
         self.contacts = ko.observableArray();
     }
 
+           
     $(document).ready(function () {
 
         var chat = new ChatViewModel();
         var users = new ConnectedUsersViewModel();
         var currentUser = new User("@ViewBag.username");
+        
 
         // Proxy creation
         var chatR = $.connection.chatHub; // chat is the name of the Hub as declared in server side code
         chatR.username = "@ViewBag.username";
-
+        
         /* Not useful at the moment
         chatR.connected = function () {
-            chatR.joined();
+        chatR.joined();
         } */
 
         // Client-side event handlers, as declared inside the  Hub
-        chatR.onMessageReceived = function (message) {
+        chatR.onMessageReceived = function (message) {            
             chat.messages.push(new ChatMessage(message.Username, message.Message, new Date(message.Timestamp)));
         }
 
@@ -94,8 +100,8 @@
 
         /* Not usefl at the moment
         chatR.rejoined = function (connectionId, username, timestamp) {
-            var connectedUser = new User(username);
-            users.contacts.push(connectedUser);
+        var connectedUser = new User(username);
+        users.contacts.push(connectedUser);
         }*/
 
         $("#send-btn").click(function () {
@@ -120,12 +126,12 @@
                         .done(function () {
                             chatR.getConnectedUsers()
                                      .done(function (connectedUsers) {
-                                         ko.utils.arrayForEach(connectedUsers, function(item) {
-                                            users.contacts.push(new User(item.Username));
-                                            });
-                                     }).done(function() { 
-                                        chatR.joined();
-                                        });
+                                         ko.utils.arrayForEach(connectedUsers, function (item) {
+                                             users.contacts.push(new User(item.Username));
+                                         });
+                                     }).done(function () {
+                                         chatR.joined();
+                                     });
                         });
     });
 
