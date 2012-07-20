@@ -62,7 +62,7 @@
 <script type="text/javascript" src="@Url.Content("/signalr/hubs")"></script>
 <script type="text/javascript">
 
-    var ChatMessage = function(sender, content, dateSent) {
+    var ChatMessage = function (sender, content, dateSent) {
         var self = this;
         self.Username = sender;
         self.Message = content;
@@ -112,6 +112,7 @@
         // Client-side event handlers, as declared inside the  Hub
         chatR.onMessageReceived = function (message) {
             chat.messages.push(new ChatMessage(message.Username, message.Message, new Date(message.Timestamp)));
+            $("#chat-list").scrollTo('max');
         }
 
         chatR.leaves = function (connectionId, username, timestamp) {
