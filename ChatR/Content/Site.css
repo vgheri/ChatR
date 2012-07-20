@@ -147,7 +147,7 @@ input, button
 {
     display:block;
     float: left;
-    width: 100px;
+    width: 120px;
     padding: 5px;        
     background-color:#D8D8D8;    
 }
@@ -181,6 +181,11 @@ input, button
     border-radius: 2px;
 }
 
+#users-list li 
+{
+    margin-bottom: 5px;
+}
+
 
 .user-box {
 	width: 90%;
@@ -188,7 +193,7 @@ input, button
 	-moz-border-radius: 3px;
     border-radius: 3px;
     height: 20px;
-    padding: 5px;
+    padding: 5px;    
 }
 
 .user-box:hover {
@@ -214,13 +219,13 @@ input, button
 
 #compose-box 
 {    
-    width: 650px;
+    width: 100%;
 }
 
 #send-btn 
 {
     margin-top:5px;
-    width: 100px;
+    width: 95%;
 }   
     
     

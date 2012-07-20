@@ -31,7 +31,7 @@
         <div id="users-list" class="span2">
             <h4>Users</h4> 
             <ul data-bind="foreach: contacts">
-                <li class="user-box"><img src="@Url.Content("~/Content/images/user.gif")" alt="user icon" width="18px" height="20px" /> | <span class="user-box-name" data-bind="text: username"></span></li>
+                <li class="user-box"><span class="user-box-name" data-bind="text: username"></span></li>
             </ul>
         </div>
         <!-- This  is the chat box -->
@@ -50,9 +50,11 @@
     </div>    
     <div id="compose" class="row-fluid">
         <div class="span2"></div>
-        <div class="span10">                            
-                <textarea id="compose-box" rows="2" cols="50" placeholder="Type your message here"></textarea>     
-                <button id="send-btn" type="submit" class="btn btn-large btn-primary">Send</button>            
+        <div class="span8">    
+             <div class="row-fluid">                        
+                <div class="span10"><textarea id="compose-box" rows="2" cols="50" placeholder="Type your message here"></textarea>     </div>
+                <div class="span2"><button id="send-btn" type="submit" class="btn btn-large btn-primary">Send</button>   </div>          
+             </div>
         </div>        
     </div>
 </div>
@@ -82,33 +84,39 @@
     var ConnectedUsersViewModel = function () {
         var self = this;
         self.contacts = ko.observableArray();
+        self.CustomRemove = function (userToRemove) {
+            var usernameToRemove = userToRemove.username;
+            self.contacts.remove(function (item) {
+                return item.username === usernameToRemove;
+            });
+        }
     }
 
-           
+
     $(document).ready(function () {
 
         var chat = new ChatViewModel();
         var users = new ConnectedUsersViewModel();
         var currentUser = new User("@ViewBag.username");
-        
+
 
         // Proxy creation
         var chatR = $.connection.chatHub; // chat is the name of the Hub as declared in server side code
         chatR.username = "@ViewBag.username";
-        
+
         /* Not useful at the moment
         chatR.connected = function () {
         chatR.joined();
         } */
 
         // Client-side event handlers, as declared inside the  Hub
-        chatR.onMessageReceived = function (message) {            
+        chatR.onMessageReceived = function (message) {
             chat.messages.push(new ChatMessage(message.Username, message.Message, new Date(message.Timestamp)));
         }
 
         chatR.leaves = function (connectionId, username, timestamp) {
             var disconnectedUser = new User(username);
-            users.contacts.remove(disconnectedUser);
+            users.CustomRemove(disconnectedUser);
         }
 
         chatR.joins = function (connectionId, username, timestamp) {
@@ -122,7 +130,7 @@
         users.contacts.push(connectedUser);
         }*/
 
-        $("#send-btn").click(function () {
+        function SendMessageContent() {
             var content = $("#compose-box").val();
             if (content != "" && content != null) {
                 var msg = new ChatMessage(currentUser.username, content);
@@ -131,6 +139,16 @@
                 }).fail(function (e) {
                     alert("Could not connect to server");
                 });
+            }
+        }
+
+        $("#send-btn").click(function () {
+            SendMessageContent();
+        });
+
+        $('#compose-box').keypress(function (e) {
+            if (e.which == 13) {
+                SendMessageContent();
             }
         });
 
