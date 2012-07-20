@@ -9,7 +9,7 @@ using ChatR.Utilities;
 
 namespace ChatR.Hubs
 {
-    public class ChatHub : Hub, IDisconnect//, IConnected
+    public class ChatHub : Hub, IDisconnect
     {
         private InMemoryRepository _repository;
 
@@ -20,6 +20,10 @@ namespace ChatR.Hubs
 
         #region IDisconnect and IConnected event handlers implementation
 
+        /// <summary>
+        /// Fired when a client disconnects from the system. The user associated with the client ID gets deleted from the list of currently connected users.
+        /// </summary>
+        /// <returns></returns>
         public System.Threading.Tasks.Task Disconnect()
         {
             ChatUser user = _repository.Users.Where(u => u.Id == Context.ConnectionId).FirstOrDefault();
@@ -31,34 +35,28 @@ namespace ChatR.Hubs
             return null;            
         }
 
-        /*
-        public System.Threading.Tasks.Task Connect()
-        {
-            return Caller.connected();            
-        } */
-
-        /*
-        public System.Threading.Tasks.Task Reconnect(IEnumerable<string> groups)
-        {
-            return Clients.rejoined(Context.ConnectionId, Caller.userName, DateTime.Now);
-        }   */
-
         #endregion
 
         #region Chat event handlers
 
+        /// <summary>
+        /// Fired when a client pushes a message to the server.
+        /// </summary>
+        /// <param name="message"></param>
         public void Send(ChatMessage message)
         {
             // Sanitize input: Search and replace every <script> and </script> tag with (script) and (/script)
             message.Message = HttpUtility.HtmlEncode(message.Message);
             // Process URLs: Extract any URL and process rich content (e.g. Youtube links)
-            HashSet<string> extractedURLs = new HashSet<string>();
-            message.Message = TextParser.TransformAndExtractUrls(message.Message, out extractedURLs);          
-            
+            HashSet<string> extractedURLs;
+            message.Message = TextParser.TransformAndExtractUrls(message.Message, out extractedURLs);
             message.Timestamp = DateTime.Now;
             Clients.onMessageReceived(message);
         }
 
+        /// <summary>
+        /// Fired when a client joins the chat. Here round trip state is available and we can register the user in the list
+        /// </summary>
         public void Joined()
         {
             ChatUser user = new ChatUser()
@@ -70,6 +68,10 @@ namespace ChatR.Hubs
             Clients.joins(Context.ConnectionId, Caller.username, DateTime.Now);
         }
 
+        /// <summary>
+        /// Invoked when a client connects. Retrieves the list of all currently connected users
+        /// </summary>
+        /// <returns></returns>
         public ICollection<ChatUser> GetConnectedUsers()
         {
             ChatUser user = new ChatUser()
