@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ChatR.Models;
 
 namespace ChatR.Controllers
 {
     public class HomeController : Controller
     {
+        private InMemoryRepository _repository;
+
+        public HomeController()
+        {
+            _repository = InMemoryRepository.GetInstance();
+        }
         //
         // GET: /Home/
 
@@ -24,7 +31,16 @@ namespace ChatR.Controllers
                 ModelState.AddModelError("username", "Username is required");
                 return View();
             }
-            return RedirectToAction("Chat", "Home", new { username = username });
+            else
+            {
+                // if we have an already logged user with the same username, then append a random number to it
+                if (_repository.Users.Where(u => u.Username.Equals(username)).ToList().Count > 0)
+                {
+                    Random random = new Random();
+                    username = username + "_" + random.Next(1000);
+                }
+                return RedirectToAction("Chat", "Home", new { username = username });
+            }
         }
 
         public ActionResult Chat(string username)
