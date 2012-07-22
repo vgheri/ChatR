@@ -35,11 +35,11 @@
         <div id="chat-list" class="span8" data-bind="foreach: messages">
             <ul>
                 <li>
-                    <div class="chat-listitem-username" data-bind="text: Username">                    
+                    <div class="chat-listitem-username" data-bind="text: username">                    
                     </div>                
-                    <div class="chat-listitem-message" data-bind="html: Message">                    
+                    <div class="chat-listitem-message" data-bind="html: content">                    
                     </div>                
-                    <div class="chat-listitem-timestamp" data-bind="text: Timestamp.toLocaleTimeString()">
+                    <div class="chat-listitem-timestamp" data-bind="text: timestamp.toLocaleTimeString()">
                     </div>
                 </li>
             </ul>
@@ -68,9 +68,9 @@ on the server. Each hub on the server will become a property on the client side 
 <script type="text/javascript">
 
     $(document).ready(function () {
-        var chat = new chatR.ChatViewModel();
-        var users = new chatR.ConnectedUsersViewModel();
-        var currentUser = new chatR.User(@Html.Raw(Json.Encode(ViewBag.username)));
+        var chat = new chatR.chatViewModel();
+        var users = new chatR.connectedUsersViewModel();
+        var currentUser = new chatR.user(@Html.Raw(Json.Encode(ViewBag.username)));
 
         // Proxy creation
         var chatHub = $.connection.chatHub; // chatHub is the name of the Hub as declared in server side code
@@ -78,24 +78,24 @@ on the server. Each hub on the server will become a property on the client side 
 
         // Client-side event handlers, as declared inside the  Hub
         chatHub.onMessageReceived = function (message) {
-            chat.messages.push(new chatR.ChatMessage(message.Username, message.Message, new Date(message.Timestamp)));
+            chat.messages.push(new chatR.chatMessage(message.Username, message.Content, new Date(message.Timestamp)));
             $("#chat-list").scrollTo('max');
         }
 
         chatHub.leaves = function (connectionId, username, timestamp) {
-            var disconnectedUser = new chatR.User(username);
+            var disconnectedUser = new chatR.user(username);
             users.CustomRemove(disconnectedUser);
         }
 
         chatHub.joins = function (connectionId, username, timestamp) {
-            var connectedUser = new chatR.User(username);
+            var connectedUser = new chatR.user(username);
             users.contacts.push(connectedUser);
         }
 
-        function SendMessageContent() {
+        function sendMessageContent() {
             var content = $("#compose-box").val();
             if (content != "" && content != null) {
-                var msg = new chatR.ChatMessage(currentUser.username, content);
+                var msg = new chatR.chatMessage(currentUser.username, content);
                 chatHub.send(msg).done(function () {
                     $("#compose-box").val("");
                 }).fail(function (e) {
@@ -105,12 +105,12 @@ on the server. Each hub on the server will become a property on the client side 
         }
 
         $("#send-btn").click(function () {
-            SendMessageContent();
+            sendMessageContent();
         });
 
         $('#compose-box').keypress(function (e) {
             if (e.which == 13) {
-                SendMessageContent();
+                sendMessageContent();
             }
         });
 
@@ -125,7 +125,7 @@ on the server. Each hub on the server will become a property on the client side 
                         chatHub.getConnectedUsers()
                                     .done(function (connectedUsers) {
                                         ko.utils.arrayForEach(connectedUsers, function (item) {
-                                            users.contacts.push(new chatR.User(item.Username));
+                                            users.contacts.push(new chatR.user(item.Username));
                                         });
                                     }).done(function () {
                                         chatHub.joined();

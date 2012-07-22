@@ -45,13 +45,16 @@ namespace ChatR.Hubs
         /// <param name="message"></param>
         public void Send(ChatMessage message)
         {
-            // Sanitize input: Search and replace every <script> and </script> tag with (script) and (/script)
-            message.Message = HttpUtility.HtmlEncode(message.Message);
-            // Process URLs: Extract any URL and process rich content (e.g. Youtube links)
-            HashSet<string> extractedURLs;
-            message.Message = TextParser.TransformAndExtractUrls(message.Message, out extractedURLs);
-            message.Timestamp = DateTime.Now;
-            Clients.onMessageReceived(message);
+            if (!string.IsNullOrEmpty(message.Content))
+            {
+                // Sanitize input: Search and replace every <script> and </script> tag with (script) and (/script)
+                message.Content = HttpUtility.HtmlEncode(message.Content);
+                // Process URLs: Extract any URL and process rich content (e.g. Youtube links)
+                HashSet<string> extractedURLs;
+                message.Content = TextParser.TransformAndExtractUrls(message.Content, out extractedURLs);
+                message.Timestamp = DateTime.Now;
+                Clients.onMessageReceived(message);
+            }
         }
 
         /// <summary>
