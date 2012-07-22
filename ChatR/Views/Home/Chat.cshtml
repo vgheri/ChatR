@@ -70,7 +70,7 @@ on the server. Each hub on the server will become a property on the client side 
     $(document).ready(function () {
         var chat = new chatR.chatViewModel();
         var users = new chatR.connectedUsersViewModel();
-        var currentUser = new chatR.user(@Html.Raw(Json.Encode(ViewBag.username)));
+        var currentUser = new chatR.user(@Html.Raw(Json.Encode(Model)));
 
         // Proxy creation
         var chatHub = $.connection.chatHub; // chatHub is the name of the Hub as declared in server side code
