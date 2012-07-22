@@ -83,12 +83,12 @@ on the server. Each hub on the server will become a property on the client side 
         }
 
         chatHub.leaves = function (connectionId, username, timestamp) {
-            var disconnectedUser = new chatR.user(username);
+            var disconnectedUser = new chatR.user(username, connectionId);
             users.customRemove(disconnectedUser);
         }
 
         chatHub.joins = function (connectionId, username, timestamp) {
-            var connectedUser = new chatR.user(username);
+            var connectedUser = new chatR.user(username, connectionId);
             users.contacts.push(connectedUser);
         }
 
@@ -125,7 +125,7 @@ on the server. Each hub on the server will become a property on the client side 
                         chatHub.getConnectedUsers()
                                     .done(function (connectedUsers) {
                                         ko.utils.arrayForEach(connectedUsers, function (item) {
-                                            users.contacts.push(new chatR.user(item.Username));
+                                            users.contacts.push(new chatR.user(item.Username, item.Id));
                                         });
                                     }).done(function () {
                                         chatHub.joined();

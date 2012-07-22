@@ -10,9 +10,10 @@ chatR.chatMessage = function (sender, content, dateSent) {
     }
 }
 
-chatR.user = function (username) {
+chatR.user = function (username, connectionId) {
     var self = this;
     self.username = username;
+    self.id = connectionId;
 }
 
 // ViewModels
@@ -26,9 +27,9 @@ chatR.connectedUsersViewModel = function () {
     var self = this;
     self.contacts = ko.observableArray();
     self.customRemove = function (userToRemove) {
-        var usernameToRemove = userToRemove.username;
+        var userIdToRemove = userToRemove.id;
         self.contacts.remove(function (item) {
-            return item.username === usernameToRemove;
+            return item.id === userIdToRemove;
         });
     }
 }
