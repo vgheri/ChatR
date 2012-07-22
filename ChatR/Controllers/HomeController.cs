@@ -36,8 +36,9 @@ namespace ChatR.Controllers
                 // if we have an already logged user with the same username, then append a random number to it
                 if (_repository.Users.Where(u => u.Username.Equals(username)).ToList().Count > 0)
                 {
-                    Random random = new Random();
-                    username = username + "_" + random.Next(1000);
+                    //Random random = new Random();
+                    //username = username + "_" + random.Next(1000);   
+                    username = _repository.GetRandomizedUsername(username);
                 }
                 return RedirectToAction("Chat", "Home", new { username = username });
             }

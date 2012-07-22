@@ -76,12 +76,7 @@ namespace ChatR.Hubs
         /// </summary>
         /// <returns></returns>
         public ICollection<ChatUser> GetConnectedUsers()
-        {
-            ChatUser user = new ChatUser()
-            {
-                Id = Context.ConnectionId,
-                Username = Caller.username
-            };            
+        {    
             return _repository.Users.ToList<ChatUser>();
         }             
 

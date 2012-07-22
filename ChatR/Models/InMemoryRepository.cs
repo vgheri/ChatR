@@ -8,10 +8,12 @@ namespace ChatR.Models
     {
         private static ICollection<ChatUser> _connectedUsers;
         private static InMemoryRepository _instance = null;
+        private static int seedCounter;
 
         private InMemoryRepository()
         {
             _connectedUsers = new List<ChatUser>();
+            seedCounter = 0;
         }
 
         public static InMemoryRepository GetInstance()
@@ -23,7 +25,17 @@ namespace ChatR.Models
             return _instance;
         }
 
-        #region Repository methods        
+        #region Private methods
+
+        private static int GetNextSeedCounter()
+        {
+            seedCounter++;
+            return seedCounter;
+        }
+
+        #endregion
+
+        #region Repository methods
 
         public IQueryable<ChatUser> Users { get { return _connectedUsers.AsQueryable(); } }
 
@@ -35,6 +47,11 @@ namespace ChatR.Models
         public void Remove(ChatUser user)
         {
             _connectedUsers.Remove(user);
+        }
+
+        public string GetRandomizedUsername(string username)
+        {
+            return username + "_" + GetNextSeedCounter().ToString();
         }
 
         #endregion
