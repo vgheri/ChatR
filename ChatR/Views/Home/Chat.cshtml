@@ -64,82 +64,39 @@ If you navigate to signalr/hubs in your browser, you'll see a script that is dyn
 on the server. Each hub on the server will become a property on the client side $.connection, e.g. $.connection.myHub.
  -->
 <script type="text/javascript" src="@Url.Content("/signalr/hubs")"></script>  
+<script type="text/javascript" src="@Url.Content("~/Js/chatR.js")"></script>
 <script type="text/javascript">
 
-    var ChatMessage = function (sender, content, dateSent) {
-        var self = this;
-        self.Username = sender;
-        self.Message = content;
-        if (dateSent != null) {
-            self.Timestamp = dateSent;
-        }
-    }
-
-    var User = function (username) {
-        var self = this;
-        self.username = username;
-    }
-
-    var ChatViewModel = function () {
-        var self = this;
-        self.messages = ko.observableArray();
-    }
-
-    var ConnectedUsersViewModel = function () {
-        var self = this;
-        self.contacts = ko.observableArray();
-        self.CustomRemove = function (userToRemove) {
-            var usernameToRemove = userToRemove.username;
-            self.contacts.remove(function (item) {
-                return item.username === usernameToRemove;
-            });
-        }
-    }
-
-
     $(document).ready(function () {
-
-        var chat = new ChatViewModel();
-        var users = new ConnectedUsersViewModel();
-        var currentUser = new User("@ViewBag.username");
-
+        var chat = new chatR.ChatViewModel();
+        var users = new chatR.ConnectedUsersViewModel();
+        var currentUser = new chatR.User(@Html.Raw(Json.Encode(ViewBag.username)));
 
         // Proxy creation
-        var chatR = $.connection.chatHub; // chatHub is the name of the Hub as declared in server side code
-        chatR.username = "@ViewBag.username";
-
-        /* Not useful at the moment
-        chatR.connected = function () {
-        chatR.joined();
-        } */
+        var chatHub = $.connection.chatHub; // chatHub is the name of the Hub as declared in server side code
+        chatHub.username = currentUser.username;
 
         // Client-side event handlers, as declared inside the  Hub
-        chatR.onMessageReceived = function (message) {
-            chat.messages.push(new ChatMessage(message.Username, message.Message, new Date(message.Timestamp)));
+        chatHub.onMessageReceived = function (message) {
+            chat.messages.push(new chatR.ChatMessage(message.Username, message.Message, new Date(message.Timestamp)));
             $("#chat-list").scrollTo('max');
         }
 
-        chatR.leaves = function (connectionId, username, timestamp) {
-            var disconnectedUser = new User(username);
+        chatHub.leaves = function (connectionId, username, timestamp) {
+            var disconnectedUser = new chatR.User(username);
             users.CustomRemove(disconnectedUser);
         }
 
-        chatR.joins = function (connectionId, username, timestamp) {
-            var connectedUser = new User(username);
+        chatHub.joins = function (connectionId, username, timestamp) {
+            var connectedUser = new chatR.User(username);
             users.contacts.push(connectedUser);
         }
-
-        /* Not usefl at the moment
-        chatR.rejoined = function (connectionId, username, timestamp) {
-        var connectedUser = new User(username);
-        users.contacts.push(connectedUser);
-        }*/
 
         function SendMessageContent() {
             var content = $("#compose-box").val();
             if (content != "" && content != null) {
-                var msg = new ChatMessage(currentUser.username, content);
-                chatR.send(msg).done(function () {
+                var msg = new chatR.ChatMessage(currentUser.username, content);
+                chatHub.send(msg).done(function () {
                     $("#compose-box").val("");
                 }).fail(function (e) {
                     alert("Could not connect to server");
@@ -164,17 +121,16 @@ on the server. Each hub on the server will become a property on the client side 
         // Step 2: Get all currenlty connected users
         // Step 3: Join to the chat and nmotify all the clients (me included) that there is a new user connected
         $.connection.hub.start()
-                        .done(function () {
-                            chatR.getConnectedUsers()
-                                     .done(function (connectedUsers) {
-                                         ko.utils.arrayForEach(connectedUsers, function (item) {
-                                             users.contacts.push(new User(item.Username));
-                                         });
-                                     }).done(function () {
-                                         chatR.joined();
-                                     });
-                        });
-    });
-
+                    .done(function () {
+                        chatHub.getConnectedUsers()
+                                    .done(function (connectedUsers) {
+                                        ko.utils.arrayForEach(connectedUsers, function (item) {
+                                            users.contacts.push(new chatR.User(item.Username));
+                                        });
+                                    }).done(function () {
+                                        chatHub.joined();
+                                    });
+                    });
+    }); 
 
 </script>
