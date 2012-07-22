@@ -41,7 +41,7 @@ namespace ChatR.Controllers
                     username = _repository.GetRandomizedUsername(username);
                 }
                 return RedirectToAction("Chat", "Home", new { username = username });
-            }
+            }            
         }
 
         public ActionResult Chat(string username)

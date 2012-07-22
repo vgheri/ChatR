@@ -8,14 +8,8 @@ namespace ChatR.Models
     {
         private static ICollection<ChatUser> _connectedUsers;
         private static InMemoryRepository _instance = null;
-        private static int seedCounter;
-
-        private InMemoryRepository()
-        {
-            _connectedUsers = new List<ChatUser>();
-            seedCounter = 0;
-        }
-
+        private static readonly int max_random = 3;
+        
         public static InMemoryRepository GetInstance()
         {
             if (_instance == null)
@@ -27,10 +21,9 @@ namespace ChatR.Models
 
         #region Private methods
 
-        private static int GetNextSeedCounter()
+        private InMemoryRepository()
         {
-            seedCounter++;
-            return seedCounter;
+            _connectedUsers = new List<ChatUser>();
         }
 
         #endregion
@@ -51,7 +44,22 @@ namespace ChatR.Models
 
         public string GetRandomizedUsername(string username)
         {
-            return username + "_" + GetNextSeedCounter().ToString();
+            string tempUsername = username;
+            int newRandom = max_random, oldRandom = 0;
+            int loops = 0;
+            Random random = new Random();
+            do
+            {
+                if (loops > newRandom)
+                {
+                    oldRandom = newRandom;
+                    newRandom *= 2;
+                }
+                username = tempUsername + "_" + random.Next(oldRandom, newRandom).ToString();
+                loops++;
+            } while (GetInstance().Users.Where(u => u.Username.Equals(username)).ToList().Count > 0);
+
+            return username;
         }
 
         #endregion

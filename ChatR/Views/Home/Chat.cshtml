@@ -84,7 +84,7 @@ on the server. Each hub on the server will become a property on the client side 
 
         chatHub.leaves = function (connectionId, username, timestamp) {
             var disconnectedUser = new chatR.user(username);
-            users.CustomRemove(disconnectedUser);
+            users.customRemove(disconnectedUser);
         }
 
         chatHub.joins = function (connectionId, username, timestamp) {
