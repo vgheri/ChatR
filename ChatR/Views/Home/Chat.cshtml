@@ -68,7 +68,8 @@ on the server. Each hub on the server will become a property on the client side 
 <script type="text/javascript">
 
     
-    // Function found at http://dansnetwork.com/javascript-iso8601rfc3339-date-parser/
+    // IE doesn't parse IS8601 formatted dates, so I had to find this function to parse it
+    // (URL http://dansnetwork.com/javascript-iso8601rfc3339-date-parser/ )
     Date.prototype.setISO8601 = function(dString){
 
         var regexp = /(\d\d\d\d)(-)?(\d\d)(-)?(\d\d)(T)?(\d\d)(:)?(\d\d)(:)?(\d\d)(\.\d+)?(Z|([+-])(\d\d)(:)?(\d\d))/;
@@ -100,15 +101,14 @@ on the server. Each hub on the server will become a property on the client side 
         return this;
     };
 
-
     $(document).ready(function () {
         var chat = new chatR.chatViewModel();
         var users = new chatR.connectedUsersViewModel();
-        var currentUser = new chatR.user(@Html.Raw(Json.Encode(Model)));
+        var currentUser = new chatR.user(@Html.Raw(Json.Encode(Model))); // The username chose by the user is stored in the model
 
         // Proxy creation
         var chatHub = $.connection.chatHub; // chatHub is the name of the Hub as declared in server side code
-        chatHub.username = currentUser.username;
+        chatHub.username = currentUser.username; // This is the round-trip state
 
         // Client-side event handlers, as declared inside the  Hub
         chatHub.onMessageReceived = function (message) {
@@ -117,7 +117,7 @@ on the server. Each hub on the server will become a property on the client side 
             chat.messages.push(new chatR.chatMessage(message.Username, message.Content, date));//new Date(message.Timestamp)));
             $("#chat-list").scrollTo('max');
         }
-
+        
         chatHub.leaves = function (connectionId, username, timestamp) {
             var disconnectedUser = new chatR.user(username, connectionId);
             users.customRemove(disconnectedUser);
@@ -144,6 +144,7 @@ on the server. Each hub on the server will become a property on the client side 
             sendMessageContent();
         });
 
+        // Handles Enter keystroke press event
         $('#compose-box').keypress(function (e) {
             if (e.which == 13) {
                 sendMessageContent();

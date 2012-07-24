@@ -47,7 +47,7 @@ namespace ChatR.Hubs
         {
             if (!string.IsNullOrEmpty(message.Content))
             {
-                // Sanitize input: Search and replace every <script> and </script> tag with (script) and (/script)
+                // Sanitize input
                 message.Content = HttpUtility.HtmlEncode(message.Content);
                 // Process URLs: Extract any URL and process rich content (e.g. Youtube links)
                 HashSet<string> extractedURLs;
