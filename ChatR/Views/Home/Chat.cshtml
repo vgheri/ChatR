@@ -108,22 +108,22 @@ on the server. Each hub on the server will become a property on the client side 
 
         // Proxy creation
         var chatHub = $.connection.chatHub; // chatHub is the name of the Hub as declared in server side code
-        chatHub.username = currentUser.username; // This is the round-trip state
+        chatHub.state.username = currentUser.username; // This is the round-trip state
 
         // Client-side event handlers, as declared inside the  Hub
-        chatHub.onMessageReceived = function (message) {
+        chatHub.client.onMessageReceived = function (message) {
             var date = new Date();
             date.setISO8601(message.Timestamp);
             chat.messages.push(new chatR.chatMessage(message.Username, message.Content, date));//new Date(message.Timestamp)));
             $("#chat-list").scrollTo('max');
         }
         
-        chatHub.leaves = function (connectionId, username, timestamp) {
+        chatHub.client.leaves = function (connectionId, username, timestamp) {
             var disconnectedUser = new chatR.user(username, connectionId);
             users.customRemove(disconnectedUser);
         }
 
-        chatHub.joins = function (connectionId, username, timestamp) {
+        chatHub.client.joins = function (connectionId, username, timestamp) {
             var connectedUser = new chatR.user(username, connectionId);
             users.contacts.push(connectedUser);
         }
@@ -132,7 +132,7 @@ on the server. Each hub on the server will become a property on the client side 
             var content = $("#compose-box").val();
             if (content != "" && content != null) {
                 var msg = new chatR.chatMessage(currentUser.username, content);
-                chatHub.send(msg).done(function () {
+                chatHub.server.send(msg).done(function () {
                     $("#compose-box").val("");
                 }).fail(function (e) {
                     alert("Could not connect to server");
@@ -159,13 +159,13 @@ on the server. Each hub on the server will become a property on the client side 
         // Step 3: Join to the chat and nmotify all the clients (me included) that there is a new user connected
         $.connection.hub.start()
                     .done(function () {
-                        chatHub.getConnectedUsers()
+                        chatHub.server.getConnectedUsers()
                                     .done(function (connectedUsers) {
                                         ko.utils.arrayForEach(connectedUsers, function (item) {
                                             users.contacts.push(new chatR.user(item.Username, item.Id));
                                         });
                                     }).done(function () {
-                                        chatHub.joined();
+                                        chatHub.server.joined();
                                     });
                     });
     }); 
