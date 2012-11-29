@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
-using SignalR;
-using SignalR.Hubs;
 using ChatR.Models;
 using ChatR.Utilities;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace ChatR.Hubs
 {
-    public class ChatHub : Hub, IDisconnect
+    public class ChatHub : Hub
     {
         private InMemoryRepository _repository;
 
@@ -24,15 +24,16 @@ namespace ChatR.Hubs
         /// Fired when a client disconnects from the system. The user associated with the client ID gets deleted from the list of currently connected users.
         /// </summary>
         /// <returns></returns>
-        public System.Threading.Tasks.Task Disconnect()
+        public override Task OnDisconnected()
         {
             ChatUser user = _repository.Users.Where(u => u.Id == Context.ConnectionId).FirstOrDefault();
             if (user != null)
             {
                 _repository.Remove(user);
-                return Clients.leaves(Context.ConnectionId, user.Username, DateTime.Now);
+                return Clients.All.leaves(Context.ConnectionId, user.Username, DateTime.Now);
             }
-            return null;            
+
+            return base.OnDisconnected();
         }
 
         #endregion
@@ -53,7 +54,7 @@ namespace ChatR.Hubs
                 HashSet<string> extractedURLs;
                 message.Content = TextParser.TransformAndExtractUrls(message.Content, out extractedURLs);
                 message.Timestamp = DateTime.Now;
-                Clients.onMessageReceived(message);
+                Clients.All.onMessageReceived(message);
             }
         }
 
@@ -65,10 +66,10 @@ namespace ChatR.Hubs
             ChatUser user = new ChatUser()
             {
                 Id = Context.ConnectionId,
-                Username = Caller.username
+                Username = Clients.Caller.username
             };
             _repository.Add(user);
-            Clients.joins(Context.ConnectionId, Caller.username, DateTime.Now);
+            Clients.All.joins(Context.ConnectionId, Clients.Caller.username, DateTime.Now);
         }
 
         /// <summary>
@@ -76,9 +77,9 @@ namespace ChatR.Hubs
         /// </summary>
         /// <returns></returns>
         public ICollection<ChatUser> GetConnectedUsers()
-        {    
+        {
             return _repository.Users.ToList<ChatUser>();
-        }             
+        }
 
         #endregion
     }
