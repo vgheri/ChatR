@@ -7,6 +7,7 @@ namespace ChatR.Models
     public class InMemoryRepository
     {
         private static ICollection<ChatUser> _connectedUsers;
+        private static Dictionary<string, string> _mappings;
         private static InMemoryRepository _instance = null;
         private static readonly int max_random = 3;
         
@@ -14,7 +15,7 @@ namespace ChatR.Models
         {
             if (_instance == null)
             {
-                _instance = new InMemoryRepository();
+                _instance = new InMemoryRepository();                
             }
             return _instance;
         }
@@ -24,6 +25,7 @@ namespace ChatR.Models
         private InMemoryRepository()
         {
             _connectedUsers = new List<ChatUser>();
+            _mappings = new Dictionary<string, string>();
         }
 
         #endregion
@@ -60,6 +62,21 @@ namespace ChatR.Models
             } while (GetInstance().Users.Where(u => u.Username.Equals(username)).ToList().Count > 0);
 
             return username;
+        }
+
+        public void AddMapping(string connectionId, string userId)
+        {
+            if (!string.IsNullOrEmpty(connectionId) && !string.IsNullOrEmpty(userId))
+            {
+                _mappings.Add(connectionId, userId);
+            }
+        }
+
+        public string GetUserByConnectionId(string connectionId)
+        {
+            string userId = null;
+            _mappings.TryGetValue(connectionId, out userId);            
+            return userId;
         }
 
         #endregion

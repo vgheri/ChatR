@@ -26,11 +26,15 @@ namespace ChatR.Hubs
         /// <returns></returns>
         public override Task OnDisconnected()
         {
-            ChatUser user = _repository.Users.Where(u => u.Id == Context.ConnectionId).FirstOrDefault();
-            if (user != null)
+            string userId = _repository.GetUserByConnectionId(Context.ConnectionId);
+            if (userId != null)
             {
-                _repository.Remove(user);
-                return Clients.All.leaves(Context.ConnectionId, user.Username, DateTime.Now);
+                ChatUser user = _repository.Users.Where(u => u.Id == userId).FirstOrDefault();
+                if (user != null)
+                {
+                    _repository.Remove(user);
+                    return Clients.All.leaves(user.Id, user.Username, DateTime.Now);
+                }
             }
 
             return base.OnDisconnected();
@@ -65,11 +69,13 @@ namespace ChatR.Hubs
         {
             ChatUser user = new ChatUser()
             {
-                Id = Context.ConnectionId,
+                //Id = Context.ConnectionId,                
+                Id = Guid.NewGuid().ToString(),
                 Username = Clients.Caller.username
             };
             _repository.Add(user);
-            Clients.All.joins(Context.ConnectionId, Clients.Caller.username, DateTime.Now);
+            _repository.AddMapping(Context.ConnectionId, user.Id);
+            Clients.All.joins(user.Id, Clients.Caller.username, DateTime.Now);
         }
 
         /// <summary>

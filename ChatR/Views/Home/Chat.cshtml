@@ -118,13 +118,13 @@ on the server. Each hub on the server will become a property on the client side 
             $("#chat-list").scrollTo('max');
         }
         
-        chatHub.client.leaves = function (connectionId, username, timestamp) {
-            var disconnectedUser = new chatR.user(username, connectionId);
+        chatHub.client.leaves = function (userId, username, timestamp) {
+            var disconnectedUser = new chatR.user(username, userId);
             users.customRemove(disconnectedUser);
         }
 
-        chatHub.client.joins = function (connectionId, username, timestamp) {
-            var connectedUser = new chatR.user(username, connectionId);
+        chatHub.client.joins = function (userId, username, timestamp) {
+            var connectedUser = new chatR.user(username, userId);
             users.contacts.push(connectedUser);
         }
 

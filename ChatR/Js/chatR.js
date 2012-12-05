@@ -18,10 +18,10 @@ chatR.chatMessage = function (sender, content, dateSent) {
     }
 }
 
-chatR.user = function (username, connectionId) {
+chatR.user = function (username, userId) {
     var self = this;
     self.username = username;
-    self.id = connectionId;
+    self.id = userId;
 }
 
 // ViewModels
